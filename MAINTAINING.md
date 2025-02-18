@@ -101,17 +101,65 @@ mypy src/ tests/
 
 ## Release Process
 
-1. Update version in `pyproject.toml`
-2. Update CHANGELOG.md
-3. Run tests and ensure all pass
-4. Build distribution:
-   ```bash
-   python -m build
+### 1. Update Version Number
+
+Update the version number in `pyproject.toml`:
+```toml
+[tool.poetry]
+version = "X.Y.Z"  # Update this line
+```
+
+### 2. Commit and Push Changes
+
+```bash
+git add .
+git commit -m "vX.Y.Z: Brief description of changes
+
+- Detailed change 1
+- Detailed change 2
+- etc."
+git push origin main
+```
+
+### 3. Create GitHub Release
+
+1. Go to your repository on GitHub
+2. Click on "Releases" on the right side
+3. Click "Create a new release"
+4. Choose a tag (e.g., `vX.Y.Z`)
+5. Set the title (e.g., "vX.Y.Z - Feature Description")
+6. Add detailed release notes describing the changes, for example:
+   ```markdown
+   Improved environment variable handling and documentation:
+
+   - Enhanced environment variable handling with direct access
+   - Updated documentation for API key requirements
+   - Improved error messages for missing environment variables
+   - Simplified example code and README
    ```
-5. Upload to PyPI:
-   ```bash
-   twine upload dist/*
-   ```
+7. Click "Publish release"
+
+### 4. Automatic PyPI Publishing
+
+The package will be automatically published to PyPI via GitHub Actions when you create a release. The workflow:
+
+1. Triggers automatically when a release is published
+2. Runs on Ubuntu latest with Python
+3. Performs the following steps:
+   - Installs build dependencies
+   - Builds the package using `python -m build`
+   - Uploads to PyPI using stored credentials
+   - Uses the `PYPI_API_TOKEN` from repository secrets
+
+You can monitor the publishing process in the "Actions" tab of your repository.
+
+### 5. Verify Release
+
+After the release:
+1. Check the GitHub Actions tab to ensure the workflow completed successfully
+2. Verify the new version is available on PyPI
+3. Test installation: `pip install TIRAI`
+4. Run basic functionality tests
 
 ## Continuous Integration
 
