@@ -36,7 +36,8 @@ class DeepSeekSDK(BaseAISDK):
 
         data = {
             'model': self.model,
-            'messages': [{'role': 'user', 'content': text}]
+            'messages': [{'role': 'user', 'content': text}],
+            'temperature': 0.6
         }
 
         response = requests.post(

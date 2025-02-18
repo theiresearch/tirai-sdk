@@ -10,7 +10,7 @@ setup(
     # - MAJOR: Incompatible API changes
     # - MINOR: Add functionality in a backwards-compatible manner
     # - PATCH: Backwards-compatible bug fixes
-    version="0.1.1",
+    version="0.1.2",
     author="The I Research",
     author_email="jl@theiresearch.com",
     description=
