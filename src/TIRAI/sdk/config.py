@@ -22,59 +22,60 @@ class AISDKConfig:
         Raises:
             ValueError: If API key is not found in environment variables
         """
-        configs = {
-            'gpt': {
-                'api_key': os.environ.get('OPENAI_API_KEY'),
-                'base_url': os.environ.get('OPENAI_BASE_URL', 'https://api.openai.com/v1')
-            },
-            'grok': {
-                'api_key': os.environ.get('XAI_API_KEY'),
-                'base_url': os.environ.get('XAI_BASE_URL', 'https://api.x.ai/v1')
-            },
-            'deepseek': {
-                'api_key': os.environ.get('DEEPSEEK_API_KEY'),
-                'base_url': os.environ.get('DEEPSEEK_BASE_URL', 'https://api.deepseek.com/v1')
-            },
-            'azure': {
-                'api_key': os.environ.get('AZURE_OPENAI_API_KEY'),
-                'api_url': os.environ.get(
-                    'AZURE_OPENAI_URL',
-                    'https://jl-m6x5fmxq-swedencentral.openai.azure.com/openai/deployments/o3-mini/chat/completions?api-version=2024-12-01-preview'
-                )
-            }
-        }
-
-        config = configs.get(model_type)
-        if not config:
-            raise ValueError(f"Unknown model type: {model_type}")
-
-        if not config.get('api_key'):
-            raise ValueError(f"{model_type.upper()} API key not found in environment variables")
-
-        return config
+        try:
+            if model_type == 'gpt':
+                return {
+                    'api_key': os.environ['OPENAI_API_KEY'],
+                    'base_url': os.environ.get('OPENAI_BASE_URL', 'https://api.openai.com/v1')
+                }
+            elif model_type == 'grok':
+                return {
+                    'api_key': os.environ['XAI_API_KEY'],
+                    'base_url': os.environ.get('XAI_BASE_URL', 'https://api.x.ai/v1')
+                }
+            elif model_type == 'deepseek':
+                return {
+                    'api_key': os.environ['DEEPSEEK_API_KEY'],
+                    'base_url': os.environ.get('DEEPSEEK_BASE_URL', 'https://api.deepseek.com/v1')
+                }
+            elif model_type == 'azure':
+                return {
+                    'api_key': os.environ['AZURE_OPENAI_API_KEY'],
+                    'api_url': os.environ['AZURE_OPENAI_URL']
+                }
+            else:
+                raise ValueError(f"Unknown model type: {model_type}")
+        except KeyError as e:
+            env_var = str(e).strip("'")
+            raise ValueError(f"{env_var} not found in environment variables") from None
 
     @staticmethod
-    def create_sdk(model: str) -> Any:
-        """Create an SDK instance based on the model name
+    def create_sdk(model_name: str) -> Any:
+        """Create an SDK instance for the specified model
 
         Args:
-            model: Name of the model (e.g., 'gpt-4o', 'grok-2-latest')
+            model_name: Name of the model to use (e.g., 'gpt-4o', 'grok-2-latest')
 
         Returns:
-            An instance of the appropriate SDK class
+            SDK instance for the specified model
 
         Raises:
             ValueError: If model type is unknown or API key is missing
         """
-        if model.startswith('gpt'):
-            config = AISDKConfig.get_config('gpt')
-            return OpenAISDK(api_key=config['api_key'], base_url=config['base_url'])
-        elif model.startswith('deepseek'):
-            config = AISDKConfig.get_config('deepseek')
-            return DeepSeekSDK(api_key=config['api_key'], base_url=config['base_url'])
-        elif model.startswith('azure'):
-            config = AISDKConfig.get_config('azure')
-            return AzureOpenAISDK(api_key=config['api_key'], api_url=config['api_url'])
-        else:  # default to grok
-            config = AISDKConfig.get_config('grok')
-            return XAI_SDK(api_key=config['api_key'], base_url=config['base_url'])
+        model_map = {
+            'gpt-4o': ('gpt', OpenAISDK),
+            'grok-2-latest': ('grok', XAI_SDK),
+            'deepseek-reasoner': ('deepseek', DeepSeekSDK),
+            'azure-o3-mini': ('azure', AzureOpenAISDK)
+        }
+
+        if model_name not in model_map:
+            raise ValueError(f"Unknown model: {model_name}")
+
+        model_type, sdk_class = model_map[model_name]
+        config = AISDKConfig.get_config(model_type)
+
+        if model_type == 'azure':
+            return sdk_class(config['api_key'], model_name, config['api_url'])
+        else:
+            return sdk_class(config['api_key'], model_name, config['base_url'])

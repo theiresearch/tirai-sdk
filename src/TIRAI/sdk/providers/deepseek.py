@@ -10,16 +10,16 @@ from ..base import BaseAISDK
 class DeepSeekSDK(BaseAISDK):
     """DeepSeek API client"""
 
-    def __init__(self, api_key: str, base_url: str = 'https://api.deepseek.com/v1'):
+    def __init__(self, api_key: str, model: str, base_url: str = 'https://api.deepseek.com/v1'):
+        super().__init__(model)
         self.api_key = api_key
         self.base_url = base_url
 
-    def get_response(self, text: str, model: str) -> Tuple[str, float]:
+    def get_response(self, text: str) -> Tuple[str, float]:
         """Get response from DeepSeek model
 
         Args:
             text: Input text to send to the model
-            model: Name of the model to use
 
         Returns:
             Tuple of (response text, time taken in seconds)
@@ -34,17 +34,17 @@ class DeepSeekSDK(BaseAISDK):
             'Content-Type': 'application/json'
         }
 
+        data = {
+            'model': self.model,
+            'messages': [{'role': 'user', 'content': text}]
+        }
+
         response = requests.post(
             f'{self.base_url}/chat/completions',
             headers=headers,
-            json={
-                'model': model,
-                'messages': [{
-                    'role': 'user',
-                    'content': text
-                }]
-            }
+            json=data
         )
         response.raise_for_status()
 
-        return response.json()['choices'][0]['message']['content'], time.time() - start_time
+        end_time = time.time()
+        return response.json()['choices'][0]['message']['content'], end_time - start_time
