@@ -5,10 +5,16 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="TIRAI",
+    # Update this version number for new releases
+    # Format: MAJOR.MINOR.PATCH (e.g., 0.1.0)
+    # - MAJOR: Incompatible API changes
+    # - MINOR: Add functionality in a backwards-compatible manner
+    # - PATCH: Backwards-compatible bug fixes
     version="0.1.0",
     author="The I Research",
     author_email="jl@theiresearch.com",
-    description="The I Research AI Tools - A unified SDK for various AI model providers",
+    description=
+    "The I Research AI Tools - A unified SDK for various AI model providers",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/TheIResearch/tirai-sdk",
