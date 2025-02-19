@@ -24,6 +24,16 @@ The I Research AI - A unified SDK for various AI model providers.
 pip install TIRAI
 ```
 
+## Super Quick Start
+```bash
+from TIRAI import AISDKConfig
+
+sdk = AISDKConfig.create_sdk('gpt-4o')
+response, time_taken = sdk.get_response("What is artificial intelligence?")
+
+print(response)
+```
+
 ## Quick Start
 
 1. Set up environment variables for your chosen provider:
