@@ -19,7 +19,6 @@ pip install --upgrade TIRAI
 ## Features
 
 - Unified interface for multiple AI providers:
-  - AWS Claude 3.7 Sonnet
   - xAI's grok-2-latest (waiting for grok 3 api)
   - DeepSeek's deepseek-reasoner
   - Azure o3-mini
@@ -35,7 +34,7 @@ pip install --upgrade TIRAI
 ```python
 from TIRAI import AISDKConfig
 
-sdk = AISDKConfig.create_sdk('anthropic.claude-3-7-sonnet-20250219-v1:0')
+sdk = AISDKConfig.create_sdk('deepseek-reasoner')
 response, time_taken = sdk.get_response("What is artificial intelligence?")
 
 print(response)
@@ -46,11 +45,6 @@ print(response)
 1. Set up environment variables for your chosen provider:
 
 ```bash
-# AWS Claude
-export AWS_ACCESS_KEY_ID="your-access-key"                  # Required
-export AWS_SECRET_ACCESS_KEY="your-secret-key"              # Required
-export AWS_REGION="your-region"                             # Required
-
 # xAI (Grok)
 export XAI_API_KEY="your-key"                               # Required
 export XAI_BASE_URL="https://api.x.ai/v1"                   # Optional
@@ -74,8 +68,7 @@ export OPENAI_BASE_URL="https://api.openai.com/v1"          # Optional
 from TIRAI import AISDKConfig
 
 # Create an SDK instance for your chosen model
-sdk = AISDKConfig.create_sdk('anthropic.claude-3-7-sonnet-20250219-v1:0')  # For AWS Claude 3.7
-# sdk = AISDKConfig.create_sdk('grok-2-latest')  # For xAI (Grok)
+sdk = AISDKConfig.create_sdk('grok-2-latest')  # For xAI (Grok)
 # sdk = AISDKConfig.create_sdk('deepseek-reasoner')  # For DeepSeek R1
 # sdk = AISDKConfig.create_sdk('azure-o3-mini')  # For Azure o3-mini
 # sdk = AISDKConfig.create_sdk('gpt-4o')         # For OpenAI GPT-4o
@@ -91,7 +84,6 @@ except Exception as e:
 
 ## Supported Models
 
-- AWS Claude: `anthropic.claude-3-7-sonnet-20250219-v1:0`
 - xAI: `grok-2-latest`
 - DeepSeek: `deepseek-reasoner`
 - Azure OpenAI: `azure-o3-mini`
@@ -112,27 +104,6 @@ except requests.exceptions.RequestException as e:
 
 ## Advanced Usage Examples for Cloud Providers
 
-### AWS Claude with Custom Parameters
-
-```python
-from TIRAI.sdk.providers import AWSClaudeSDK
-
-sdk = AWSClaudeSDK(
-    aws_access_key_id="your_access_key",
-    aws_secret_access_key="your_secret_key",
-    region_name="your_region",
-    temperature=1,  # optional
-    max_tokens=500,   # optional
-    top_p=0.999,      # optional
-    top_k=250,       # optional
-    stop_sequences=["Stop here"]  # optional
-)
-
-response, time_taken = sdk.get_response("Your prompt here")
-print(f"Response: {response}")
-print(f"Time taken: {time_taken:.2f}s")
-```
-
 ### Azure OpenAI
 
 ```python
@@ -148,7 +119,6 @@ response, time_taken = sdk.get_response("Your prompt here")
 print(f"Response: {response}")
 print(f"Time taken: {time_taken:.2f}s")
 ```
-
 
 ## Development
 
