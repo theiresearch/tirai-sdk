@@ -35,7 +35,7 @@ pip install --upgrade TIRAI
 ```python
 from TIRAI import AISDKConfig
 
-sdk = AISDKConfig.create_sdk('aws-claude-3.7-sonnet')
+sdk = AISDKConfig.create_sdk('anthropic.claude-3-7-sonnet-20250219-v1:0')
 response, time_taken = sdk.get_response("What is artificial intelligence?")
 
 print(response)
@@ -74,7 +74,7 @@ export OPENAI_BASE_URL="https://api.openai.com/v1"          # Optional
 from TIRAI import AISDKConfig
 
 # Create an SDK instance for your chosen model
-sdk = AISDKConfig.create_sdk('aws-claude-3.7-sonnet')  # For AWS Claude 3.7
+sdk = AISDKConfig.create_sdk('anthropic.claude-3-7-sonnet-20250219-v1:0')  # For AWS Claude 3.7
 # sdk = AISDKConfig.create_sdk('grok-2-latest')  # For xAI (Grok)
 # sdk = AISDKConfig.create_sdk('deepseek-reasoner')  # For DeepSeek R1
 # sdk = AISDKConfig.create_sdk('azure-o3-mini')  # For Azure o3-mini
@@ -91,7 +91,7 @@ except Exception as e:
 
 ## Supported Models
 
-- AWS Claude: `aws-claude-3.7-sonnet`
+- AWS Claude: `anthropic.claude-3-7-sonnet-20250219-v1:0`
 - xAI: `grok-2-latest`
 - DeepSeek: `deepseek-reasoner`
 - Azure OpenAI: `azure-o3-mini`
